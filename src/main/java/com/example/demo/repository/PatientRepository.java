@@ -8,4 +8,5 @@ import com.example.demo.model.Patient;
 @Repository
 public interface PatientRepository extends MongoRepository<Patient, String> {
 
+	
 }
