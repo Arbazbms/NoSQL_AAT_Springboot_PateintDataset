@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Patient;
 import com.example.demo.repository.PatientRepository;
 
+
+@CrossOrigin
 @RestController
 public class PatientController {
 
@@ -79,32 +82,27 @@ public class PatientController {
 		return patients;
 	}
 
-	@GetMapping("/analytic3")
-	public Map<String, Long> analyticQuery3() {
+	@GetMapping("/analytic3/male")
+	public long analyticQuery3() {
 
-		Map<String, Long> map = new HashMap();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("Sex").is("M"));
 		query.addCriteria(Criteria.where("HeartDisease").is(1));
 		long male = mongoTemplate.count(query, Patient.class);
-
-		map.put("Male", male);
-
-		return map;
+		
+		return male;
 	}
 	
-	@GetMapping("/analytic4")
-	public Map<String, Long> analyticQuery4() {
 
-		Map<String, Long> map = new HashMap();
+	@GetMapping("/analytic4/female")
+	public long analyticQuery4() {
+
 		Query query = new Query();
 		query.addCriteria(Criteria.where("Sex").is("F"));
 		query.addCriteria(Criteria.where("HeartDisease").is(1));
 		long male = mongoTemplate.count(query, Patient.class);
-
-		map.put("FeMale", male);
-
-		return map;
+		return male;
 	}
 
+	
 }
