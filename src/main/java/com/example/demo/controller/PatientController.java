@@ -50,6 +50,7 @@ public class PatientController {
 
 	}
 
+
 	@DeleteMapping("/{id}")
 	public String deletePatient(@PathVariable String id) {
 		patientRepository.deleteById(id);
@@ -66,17 +67,34 @@ public class PatientController {
 
 	// Analytics Queries
 	@GetMapping("/analytic1")
-	public long analyticQuery1() {
+	public Map<String, Long>analyticQuery1() {
+		Map<String, Long> m = new HashMap<String, Long>();
 		Query query = new Query();
+		query.addCriteria(Criteria.where("HeartDisease").is(1));
+		long patients = mongoTemplate.count(query, Patient.class);
+		m.put("one", patients);
+		
+		Query query1 = new Query();
+		query1.addCriteria(Criteria.where("HeartDisease").is(0));
+		long patient1 = mongoTemplate.count(query1, Patient.class);
+		m.put("two", patient1);
+		return m;
+	}
+	
+	
+	@GetMapping("/analytic2")
+	public long analyticQuery2() {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("Age").lt(40).gt(20));
 		query.addCriteria(Criteria.where("HeartDisease").is(1));
 		long patients = mongoTemplate.count(query, Patient.class);
 		return patients;
 	}
-
-	@GetMapping("/analytic2")
-	public long analyticQuery2() {
+	
+	@GetMapping("/analytic/old")
+	public long analyticQuery40() {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("Age").lt(50).gt(20));
+		query.addCriteria(Criteria.where("Age").lt(60).gt(40));
 		query.addCriteria(Criteria.where("HeartDisease").is(1));
 		long patients = mongoTemplate.count(query, Patient.class);
 		return patients;
